@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/csv"
+	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -59,10 +60,11 @@ func (g *GameState) ProcessCSV() {
 	for index, record := range records {
 		fmt.Println(index, record)
 		if index > 0 {
+			correctAnswer, _ := toInt(record[5])
 			question := Question{
 				Text: 		record[0],
 				Options: 	record[1:5],
-				Answer: 	toInt(record[5]),
+				Answer: 	correctAnswer,
 			}
 
 			g.Questions = append(g.Questions, question)
@@ -70,20 +72,52 @@ func (g *GameState) ProcessCSV() {
 	}
 }
 
-func toInt(s string) int {
+// toInt pode retornar integer e error
+func toInt(s string) (int, error) {
 	i, err := strconv.Atoi(s)
 
 	if err != nil {
-		panic(err)
+		return 0, errors.New("não é permitido caracter diferente de número")
 	}
 
-	return i
+	return i, nil
+}
+
+func (g *GameState) Run() {
+	for index, question := range g.Questions {
+		fmt.Printf("\033[33m %d. %s \033[0m\n", index+1, question.Text)
+
+		for j, option := range question.Options {
+			fmt.Printf("[%d] %s\n", j+1, option)
+		}
+
+		fmt.Println("Digite uma alternativa")
+
+		var answer int
+		var err error
+
+		// for infinito, só sai quando o usuário digita o valor correto.
+		// Sai apenas no "break"
+		// No "continue" executa o for novamente
+		for {
+			reader := bufio.NewReader(os.Stdin)
+			read, _ := reader.ReadString('\n')
+
+			answer, err = toInt(read[:len(read)-1]) // é feito um slice na string
+
+			if err != nil {
+				fmt.Println(err.Error())
+				continue
+			}
+			break
+		}
+		fmt.Println(answer)
+	}
 }
 
 func main() {
 	game := &GameState{}
-	go game.ProcessCSV()
-	game.Init()
-
-	fmt.Println(game.Questions)
+	/* go */ game.ProcessCSV()
+	// game.Init()
+	game.Run()
 }
