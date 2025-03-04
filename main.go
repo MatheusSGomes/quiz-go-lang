@@ -17,7 +17,7 @@ type Question struct {
 
 type GameState struct {
 	Name 		string
-	Points 		string
+	Points 		int
 	Questions	[]Question
 }
 
@@ -111,7 +111,14 @@ func (g *GameState) Run() {
 			}
 			break
 		}
-		fmt.Println(answer)
+
+		if answer == question.Answer {
+			fmt.Println("Parabéns você acertou!")
+			g.Points += 10
+		} else {
+			fmt.Println("Você errou!")
+			fmt.Println("----------------------")
+		}
 	}
 }
 
