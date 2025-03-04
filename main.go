@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
 
 type Question struct {
 	Text 	string
@@ -17,6 +21,19 @@ type GameState struct {
 func (g *GameState) Init() {
 	fmt.Println("Seja bem vindo(a) ao quiz")
 	fmt.Println("Escreva o seu nome: ")
+	reader := bufio.NewReader(os.Stdin)
+
+	/* ReadString recebe o caracterer limite de leitura. Ou seja, quando identificar o \n para a leitura */
+	/* ReadString retorna um "name" ou erro */
+	name, err, := reader.ReadString('\n')
+
+	if err != nil {
+		panic("Erro ao ler a string")
+	}
+
+	g.Name = name
+
+	fmt.Printf("Vamos ao jogo %s", name)
 }
 
 func main() {
