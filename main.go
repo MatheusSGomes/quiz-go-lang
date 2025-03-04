@@ -58,7 +58,6 @@ func (g *GameState) ProcessCSV() {
 	}
 
 	for index, record := range records {
-		fmt.Println(index, record)
 		if index > 0 {
 			correctAnswer, _ := toInt(record[5])
 			question := Question{
@@ -124,7 +123,9 @@ func (g *GameState) Run() {
 
 func main() {
 	game := &GameState{}
-	/* go */ game.ProcessCSV()
-	// game.Init()
+	go game.ProcessCSV()
+	game.Init()
 	game.Run()
+
+	fmt.Printf("Fim de jogo, você fez %d pontos\n", game.Points)
 }
