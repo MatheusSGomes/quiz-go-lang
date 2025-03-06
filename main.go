@@ -70,7 +70,7 @@ func (g *GameState) ProcessCSV() int {
 		}
 	}
 
-	return len(records)
+	return len(records) - 1
 }
 
 // toInt pode retornar integer e error
@@ -129,15 +129,17 @@ func main() {
 	game.Init()
 	game.Run()
 
-	score := (game.Points * 100) / (len * 10) // calcula porcentagem
+	score := (game.Points * 100) / (len * 10) // calcula porcentagem de acertos
+
+	var msg string = ""
 
 	if score >= 90 {
-		fmt.Println("Excelente pontuação!")
+		msg = "Excelente pontuação!"
 	} else if score >= 70 {
-		fmt.Println("Boa pontuação!")
+		msg = "Boa pontuação!"
 	} else {
-		fmt.Println("Baixa pontuação.")
+		msg = "Baixa pontuação."
 	}
 
-	fmt.Printf("Fim de jogo, você fez %d pontos\n", game.Points)
+	fmt.Printf(msg + "Fim de jogo, você fez %d pontos\n", game.Points)
 }
