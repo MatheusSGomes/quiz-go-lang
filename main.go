@@ -39,7 +39,7 @@ func (g *GameState) Init() {
 	fmt.Printf("Vamos ao jogo %s", name)
 }
 
-func (g *GameState) ProcessCSV() {
+func (g *GameState) ProcessCSV() int {
 	file, err := os.Open("questions.csv")
 
 	if err != nil {
@@ -69,6 +69,8 @@ func (g *GameState) ProcessCSV() {
 			g.Questions = append(g.Questions, question)
 		}
 	}
+
+	return len(records)
 }
 
 // toInt pode retornar integer e error
@@ -123,9 +125,13 @@ func (g *GameState) Run() {
 
 func main() {
 	game := &GameState{}
-	go game.ProcessCSV()
+	len := /* go */ game.ProcessCSV()
 	game.Init()
 	game.Run()
+
+	score := (game.Points * 100) / (len * 10) // calcula porcentagem
+
+	fmt.Println(score)
 
 	fmt.Printf("Fim de jogo, você fez %d pontos\n", game.Points)
 }
