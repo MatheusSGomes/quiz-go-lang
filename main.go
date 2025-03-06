@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 )
 
 type Question struct {
@@ -140,9 +141,25 @@ func (game *GameState) Finish(len int) {
 }
 
 func main() {
-	game := &GameState{}
-	len := /* go */ game.ProcessCSV()
-	game.Init()
-	game.Run()
-	game.Finish(len)
+	timeout := 10 * time.Second
+
+	// Canal criado para sinalizar o fim do jogo
+	done := make(chan bool)
+
+	// Executa o jogo em uma goroutine
+	go func() {
+		game := &GameState{}
+		len := /* go */ game.ProcessCSV()
+		game.Init()
+		game.Run()
+		game.Finish(len)
+		done <- true // Informar que o jogo terminou
+	}()
+
+	select {
+	case <- done:
+		fmt.Println("Jogo concluído dentro do tempo!")
+	case <- time.After(timeout):
+		fmt.Println("Tempo esgotado!")
+	}
 }
