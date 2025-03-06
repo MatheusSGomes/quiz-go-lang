@@ -131,7 +131,13 @@ func main() {
 
 	score := (game.Points * 100) / (len * 10) // calcula porcentagem
 
-	fmt.Println(score)
+	if score >= 90 {
+		fmt.Println("Excelente pontuação!")
+	} else if score >= 70 {
+		fmt.Println("Boa pontuação!")
+	} else {
+		fmt.Println("Baixa pontuação.")
+	}
 
 	fmt.Printf("Fim de jogo, você fez %d pontos\n", game.Points)
 }
