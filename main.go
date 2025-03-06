@@ -123,12 +123,7 @@ func (g *GameState) Run() {
 	}
 }
 
-func main() {
-	game := &GameState{}
-	len := /* go */ game.ProcessCSV()
-	game.Init()
-	game.Run()
-
+func (game *GameState) Finish(len int) {
 	score := (game.Points * 100) / (len * 10) // calcula porcentagem de acertos
 
 	var msg string = ""
@@ -142,4 +137,12 @@ func main() {
 	}
 
 	fmt.Printf(msg + "Fim de jogo, você fez %d pontos\n", game.Points)
+}
+
+func main() {
+	game := &GameState{}
+	len := /* go */ game.ProcessCSV()
+	game.Init()
+	game.Run()
+	game.Finish(len)
 }
