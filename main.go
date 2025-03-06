@@ -137,11 +137,12 @@ func (game *GameState) Finish(len int) {
 		msg = "Baixa pontuação."
 	}
 
-	fmt.Printf(msg + "Fim de jogo, você fez %d pontos\n", game.Points)
+	fmt.Println("-----------------------")
+	fmt.Printf(msg + " você fez %d pontos\n", game.Points)
 }
 
 func main() {
-	timeout := 10 * time.Second
+	timeout := 30 * time.Second
 
 	// Canal criado para sinalizar o fim do jogo
 	done := make(chan bool)
