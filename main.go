@@ -40,6 +40,22 @@ func (g *GameState) Init() {
 	fmt.Printf("Vamos ao jogo %s", name)
 }
 
+func (g *GameState) ChosenQuestionnaire() string {
+	fmt.Println("Escolha um tema para o seu Quiz: ")
+	fmt.Println(" 1) História")
+	fmt.Println(" 2) Conhecimentos gerais")
+	fmt.Println(" 3) Inglês")
+
+	chosenQuestions := bufio.NewReader(os.Stdin)
+	optionChosen, err := chosenQuestions.ReadString('\n')
+
+	if err != nil {
+		panic("Opção não encontrada")
+	}
+
+	return optionChosen
+}
+
 func (g *GameState) ProcessCSV() int {
 	file, err := os.Open("questions.csv")
 
@@ -150,8 +166,9 @@ func main() {
 	// Executa o jogo em uma goroutine
 	go func() {
 		game := &GameState{}
-		len := /* go */ game.ProcessCSV()
 		game.Init()
+		game.ChosenQuestionnaire()
+		len := /* go */ game.ProcessCSV()
 		game.Run()
 		game.Finish(len)
 		done <- true // Informar que o jogo terminou
