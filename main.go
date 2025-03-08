@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -56,8 +57,9 @@ func (g *GameState) ChosenQuestionnaire() string {
 	return optionChosen
 }
 
-func (g *GameState) ProcessCSV() int {
-	file, err := os.Open("questions.csv")
+func (g *GameState) ProcessCSV(opt string) int {
+	fileName := "questions-" + strings.TrimSpace(opt) + ".csv"
+	file, err := os.Open(fileName)
 
 	if err != nil {
 		panic("Erro ao ler arquivo")
@@ -167,8 +169,8 @@ func main() {
 	go func() {
 		game := &GameState{}
 		game.Init()
-		game.ChosenQuestionnaire()
-		len := /* go */ game.ProcessCSV()
+		opt := game.ChosenQuestionnaire()
+		len := /* go */ game.ProcessCSV(opt)
 		game.Run()
 		game.Finish(len)
 		done <- true // Informar que o jogo terminou
